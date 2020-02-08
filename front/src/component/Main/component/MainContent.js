@@ -1,17 +1,37 @@
 import React from 'react'
 import * as S from '../../../style/MainStyle'
 import { MainClass } from '../component'
+import { edit } from '../../../img';
 
-const MainContent = ({title,classData}) => {
+const MainContent = ({checked,title,classData}) => {
+    const dummyData = [
+        {
+            num: 1,
+        },
+        {
+            num: 2,
+        },
+        {
+            num: 3,
+        },
+        {
+            num: 4,
+        }
+    ];
+    const checkedValue = Object.values(checked);
+    const filteredData = dummyData.filter((e)=> checkedValue[e.num-1]); 
     return (
         <S.MainContent>
-            <h2>{title}</h2>
+            <div class="wrapper">
+                <h2>{title}</h2>
+                <S.MainFixButton><img src={edit} alt=""/>수정</S.MainFixButton>
+            </div>
+           
             <hr/>
             <div>
-                <MainClass num="1" title={title}/>
-                <MainClass num="2" title={title}/>
-                <MainClass num="3" title={title}/>
-                <MainClass num="4" title={title}/>
+                {
+                    filteredData.map((e)=> <MainClass key={e.num} num={e.num} title={title}></MainClass>)
+                }
             </div>
         </S.MainContent>
     )

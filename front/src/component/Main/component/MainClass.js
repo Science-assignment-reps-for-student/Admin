@@ -1,6 +1,7 @@
 import React from 'react'
 import * as S from '../../../style/MainStyle'
 import { MainList } from '../component'
+import { download } from '../../../img'
 
 const MainClass = ({num,title}) => {
 
@@ -11,6 +12,7 @@ const MainClass = ({num,title}) => {
                 if(e.isChecked){
                     counter++;
                 }
+                return e;
             })
         }
         return counter;
@@ -20,7 +22,7 @@ const MainClass = ({num,title}) => {
         {
             name: "강신희",
             number: 1201,
-            isChecked: true,
+            isChecked: false,
         },
         {
             name: "오준상",
@@ -35,7 +37,7 @@ const MainClass = ({num,title}) => {
         {
             name: "정우영",
             number: 1200,
-            isChecked: false,
+            isChecked: true,
         },
         {
             name: "이우찬",
@@ -138,8 +140,7 @@ const MainClass = ({num,title}) => {
                         </div>
 
                         <S.MainButtonDiv>
-                            <S.MainButton>수정</S.MainButton>
-                            <S.MainButton>다운로드</S.MainButton>
+                            <S.MainButton><img src={download} alt=""/>다운로드</S.MainButton>
                         </S.MainButtonDiv>
                     </S.MainClassCount>
                     <div>

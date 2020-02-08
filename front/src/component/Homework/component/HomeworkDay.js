@@ -1,16 +1,21 @@
 import React from 'react'
 import * as S from '../../../style/HomeworkStyle'
 
-const HomeworkDay = ({children, dateChange}) => {
+const HomeworkDay = ({ dateChange, num, date }) => {
 
     const inputChange = (e) => {
+        const buffer = Object.assign({},date);
         const value = e.target.value;
-        dateChange(value);
+        buffer[num] = value;
+        dateChange(buffer);
     }
+
+
+
     return (
         <S.HomeworkDay>
-            {children}
-            <S.HomeworkDayInput onChange={inputChange} type="date" required/>
+            종료 : 
+            <S.HomeworkDayInput onChange={inputChange} value={date[num]} type="date"/>
         </S.HomeworkDay>
     )
 }

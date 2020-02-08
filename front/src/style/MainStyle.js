@@ -29,6 +29,12 @@ export const MainContent = styled.div`
             }
         }
     }
+    > .wrapper {
+        margin: 6px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 `
 
 export const MainClass = styled.div`
@@ -106,7 +112,7 @@ export const MainButtonDiv = styled.div`
 `
 
 export const MainButton = styled.button`
-    width: 95px;
+    width: 190px;
     height: 29px;
     font-weight: 600;
     color: black;
@@ -117,6 +123,7 @@ export const MainButton = styled.button`
     > img {
         width: 10px;
         height: 10px;
+        margin-right: 10px;
     }
 `
 
@@ -138,8 +145,26 @@ export const MainNav = styled.div`
 
 export const MainClassCheckbox = styled.div`
     padding: 10px;
+    display: flex;
+    align-items: center;
     > span {
         font-weight: 600;
         font-size: 13px;
+    }
+`
+
+export const MainFixButton = styled.button`
+    width: auto;
+    height: 40px;
+    font-weight: 600;
+    font-size: 20px;
+    color: black;
+    border: none;
+    margin-right: 50px;
+    background-color: #F5F5F5;
+    > img {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
     }
 `

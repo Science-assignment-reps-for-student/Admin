@@ -1,34 +1,31 @@
 import React from 'react'
 import * as S from '../../../style/HomeworkStyle'
-import { HomeworkFile } from '../component'
+import { HomeworkFile, HomeworkDay } from '../component'
 
-const HomeworkNav = ({file,fileChange,classFilter,classChange}) => {
+const HomeworkNav = ({ NavInfo, NavInfoChange }) => {
 
-    const checkboxClick = (number) => {
-        let buffer = Object.assign({},classFilter);
-        buffer[number] = !classFilter[number];
-        classChange(buffer);
-    }
+    const { file, date } = NavInfo;
+    const { fileChange, dateChange } = NavInfoChange;
 
     return (
         <S.HomeworkNav>
             <p>반 정보</p>
             <S.HomeworkLine/>
             <S.HomeworkCheckBox>
-                <input type="checkbox" onChange={()=>checkboxClick(1)}/>
                 1반
+            <HomeworkDay dateChange={dateChange} num={1} date={date} />
             </S.HomeworkCheckBox>
             <S.HomeworkCheckBox>
-                <input type="checkbox" onChange={()=>checkboxClick(2)}/>
                 2반
+                <HomeworkDay dateChange={dateChange} num={2} date={date}/>
             </S.HomeworkCheckBox>
             <S.HomeworkCheckBox>
-                <input type="checkbox" onChange={()=>checkboxClick(3)}/>
                 3반
+                <HomeworkDay dateChange={dateChange} num={3} date={date}/>
             </S.HomeworkCheckBox>
             <S.HomeworkCheckBox>
-                <input type="checkbox" onChange={()=>checkboxClick(4)}/>
                 4반
+                <HomeworkDay dateChange={dateChange} num={4} date={date}/>
             </S.HomeworkCheckBox>
             <S.HomeworkLine/>
             <HomeworkFile file={file} fileChange={fileChange}/>

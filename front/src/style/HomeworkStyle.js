@@ -115,8 +115,8 @@ export const HomeworkTitleInput = styled.input`
 `
 
 export const HomeworkDay = styled.div`
-    width: 360px;
-    height: 30px;
+    width: 240px;
+    height: 25px;
     font-size: 14px;
     font-weight: 600;
     display: flex;
@@ -127,10 +127,11 @@ export const HomeworkDay = styled.div`
     padding-left: 20px;
     background: white;
     overflow-wrap: break-word;
+    margin-left: 10px;
 `
 
 export const HomeworkDayInput = styled.input`
-    width: auto;
+    width: 160px;
     height: 90%;
     outline: none;
     border: none;
@@ -140,7 +141,7 @@ export const HomeworkDayInput = styled.input`
 `
 
 
-export const HomeworkFile = styled.label`
+export const HomeworkFile = styled.div`
     width: 340px;
     height: 80px;
     display: flex;
@@ -164,13 +165,16 @@ export const HomeworkFile = styled.label`
         padding: 5px;
         display: flex;
         align-items: center;
+        margin: 2px;
         
         > span {
             font-size: 13px;
         }
     }
-    > input {
-        display: none;
+    > label {
+        > input {
+            display: none;
+        }
     }
 `
 
@@ -206,4 +210,14 @@ export const HomeworkCheckBox = styled.div`
     font-weight: 600;
     margin-top: 10px;
     margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+`
+
+export const HomeworkFileLabel = styled.label`
+    width: 100%;
+    text-align: center;
+    >input {
+        display: none;
+    }
 `

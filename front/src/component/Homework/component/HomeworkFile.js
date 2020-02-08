@@ -3,7 +3,7 @@ import * as S from '../../../style/HomeworkStyle'
 import { fileImg } from '../../../img'
 import { HomeworkFileContent } from '../component'
 
-const HomeworkFile = ({file,fileChange}) => {
+const HomeworkFile = ({ file,fileChange }) => {
 
 
     const inputChange = (e) => {
@@ -24,16 +24,31 @@ const HomeworkFile = ({file,fileChange}) => {
         return buffer;
     }
 
+    const buttonClickHandler = () => {
+        fileChange([]);
+    }
+
     return (
-        <S.HomeworkFile>
-            {
-                file.length ? file.map((e)=><HomeworkFileContent file={file} fileChange={fileChange}>{e.name}</HomeworkFileContent>) : <div>
-                    <img src={fileImg} alt="file"/>
-                    첨부파일
+        <>
+            <S.HomeworkFile>
+                {
+                    file.length ? 
+                    file.map((e)=>{
+                        return <HomeworkFileContent file={file} key={e.file_name ? e.file_name : e.name}>
+                            { e.file_name ? e.file_name : e.name }
+                        </HomeworkFileContent>
+                    }) : 
+                    <div>
+                        <img src={fileImg} alt="file"/>
+                        첨부파일
                     </div>
-            }
-            <input multiple onChange={inputChange} type="file"/>
-        </S.HomeworkFile>
+                }
+            </S.HomeworkFile>
+            <S.HomeworkFileLabel>
+                <div onClick={buttonClickHandler}>파일 수정</div>
+                <input multiple onChange={inputChange} type="file"/>
+            </S.HomeworkFileLabel>
+        </>
     )
 }
 
