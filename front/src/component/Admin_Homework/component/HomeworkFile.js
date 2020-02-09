@@ -1,7 +1,7 @@
-import React from 'react'
-import * as S from '../../../style/HomeworkStyle'
-import { fileImg } from '../../../img'
-import { HomeworkFileContent } from '../component'
+import React from 'react';
+import * as S from '../style/HomeworkStyle';
+import  fileImg  from '../imgs/file.png';
+import { HomeworkFileContent } from '../component';
 
 const HomeworkFile = ({ file,fileChange }) => {
 

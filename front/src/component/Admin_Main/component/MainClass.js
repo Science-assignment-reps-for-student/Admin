@@ -1,7 +1,7 @@
-import React from 'react'
-import * as S from '../../../style/MainStyle'
-import { MainList } from '../component'
-import { download } from '../../../img'
+import React from 'react';
+import * as S from '../style/MainStyle';
+import { MainList } from '../component';
+import download from '../imgs/download.png';
 
 const MainClass = ({num,title}) => {
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { withRouter } from 'react-router-dom'
-import * as S from '../../../style/PublicStyle'
+import * as S from '../style/PublicStyle'
 
 const HeaderButton = ({children,page,history}) => {
 

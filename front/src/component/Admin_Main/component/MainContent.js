@@ -1,7 +1,7 @@
-import React from 'react'
-import * as S from '../../../style/MainStyle'
-import { MainClass } from '../component'
-import { edit } from '../../../img';
+import React from 'react';
+import * as S from '../style/MainStyle';
+import { MainClass } from '../component';
+import edit from '../imgs/edit.png';
 
 const MainContent = ({checked,title,classData}) => {
     const dummyData = [
@@ -22,7 +22,7 @@ const MainContent = ({checked,title,classData}) => {
     const filteredData = dummyData.filter((e)=> checkedValue[e.num-1]); 
     return (
         <S.MainContent>
-            <div class="wrapper">
+            <div className="wrapper">
                 <h2>{title}</h2>
                 <S.MainFixButton><img src={edit} alt=""/>수정</S.MainFixButton>
             </div>

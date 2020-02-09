@@ -1,5 +1,5 @@
-import React from 'react'
-import * as S from '../../../style/HomeworkStyle'
+import React from 'react';
+import * as S from '../style/HomeworkStyle';
 
 const HomeworkDay = ({ dateChange, num, date }) => {
 

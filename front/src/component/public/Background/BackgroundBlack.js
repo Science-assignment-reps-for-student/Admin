@@ -1,6 +1,6 @@
 import React from 'react'
-import * as S from '../../../style/PublicStyle'
-import { background } from '../../../img'
+import * as S from '../style/PublicStyle'
+import background from '../imgs/background.png'
 
 const BackgroundBlack = ({children}) => {
     return (

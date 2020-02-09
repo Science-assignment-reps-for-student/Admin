@@ -1,24 +1,31 @@
-import React, { createContext, useState } from 'react'
+import React, { createContext, useState, useEffect } from 'react'
 
 const AccessTokenContext = createContext({
     state: {
         accessToken: "",
+        refreshToken: "",
     },
     actuibs: {
         accessTokenChange: ()=> {},
+        refreshTokenChange: () => {},
     }
 });
 
 const AccessTokenProvider = ({ children }) => {
-    const buffer = localStorage.getItem('access_token');
-    const [accessToken,accessTokenChange] = useState(buffer);
+
+    const accessBuffer = localStorage.getItem('accessToken');
+    const refreshBuffer = localStorage.getItem('refreshToken');
+    const [accessToken,accessTokenChange] = useState(accessBuffer);
+    const [refreshToken,refreshTokenChange] = useState(refreshBuffer);
 
     const value = {
         state: {
             accessToken: accessToken,
+            refreshToken: refreshToken,
         },
         actions: {
             accessTokenChange: accessTokenChange,
+            refreshTokenChange: refreshTokenChange,
         }
     }
     return (

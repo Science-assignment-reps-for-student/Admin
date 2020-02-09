@@ -1,6 +1,6 @@
-import React from 'react'
-import * as S from '../../../style/HomeworkStyle'
-import { HomeworkTitle } from '../component'
+import React from 'react';
+import * as S from '../style/HomeworkStyle';
+import { HomeworkTitle } from '../component';
 
 const HomeworkMain = ({ MainInfo, MainInfoChange }) => {
     const { category, title, content } = MainInfo;

@@ -1,5 +1,5 @@
-import React, { useState, useCallback, useEffect } from 'react'
-import * as S from '../../../style/HomeworkStyle'
+import React, { useState, useCallback, useEffect } from 'react';
+import * as S from '../style/HomeworkStyle';
 
 const HomeworkTitle = ({ TitleInfo, TitleInfoChange }) => {
 

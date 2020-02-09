@@ -1,5 +1,5 @@
-import React from 'react'
-import * as S from '../../../style/MainStyle'
+import React from 'react';
+import * as S from '../style/MainStyle';
 
 
 const MainNav = ({ checked, checkedChange }) => {

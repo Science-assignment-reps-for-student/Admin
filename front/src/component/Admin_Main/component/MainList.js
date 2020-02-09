@@ -1,6 +1,6 @@
-import React from 'react'
-import * as S from '../../../style/MainStyle'
-import { MainListContent } from '../component'
+import React from 'react';
+import * as S from '../style/MainStyle';
+import { MainListContent } from '../component';
 
 const MainList = ({studentList}) => {
     return ( 
@@ -13,7 +13,7 @@ const MainList = ({studentList}) => {
                         <th>제출여부</th>
                     </S.MainListContent>
                     {
-                        studentList.map(({name,number,isChecked}) => <MainListContent key={number} name={name} number={number} isChecked={isChecked}/>)
+                        studentList.map(({name,number,isChecked}) => <MainListContent name={name} number={number} isChecked={isChecked}/>)
                     }
                 </tbody>
             </table>

@@ -1,14 +1,15 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Header, BackgroundBlack } from '../public';
-import * as S from '../../style/HomeworkStyle';
+import * as S from './style/HomeworkStyle';
 import { HomeworkNav, HomeworkButtonBar, HomeworkMain } from './component';
 import axios from 'axios';
+import { homeworkURL, refreshAccessTokenURL } from '../resource/serverURL';
+import { refreshAccessToken, parseDate, reparseDate, isDataAllow, isAllFile } from '../resource/publicFunction';
 import { withRouter } from 'react-router-dom';
 
-const Homework = ({ state, type, num, history }) => {
+const Admin_Homework = ({ state, type, num, history, actions }) => {
     const homeworkNum = 52;
-    const homeworkURL = "http://15.165.174.31/homework";
-    const { accessToken } = state;
+    const { accessToken, refreshToken } = state;
     const header = {
         headers: {
             "Authorization": `Baerer ${accessToken}`
@@ -67,24 +68,6 @@ const Homework = ({ state, type, num, history }) => {
         dateChange,
     };
 
-    const parseDate = (date) => {
-        return Date.parse(new Date(date));
-    }
-
-    const reparseDate = (parsedDate) => {
-        const bufferDate = new Date(parsedDate);
-        const year = bufferDate.getFullYear().toString();
-        let month = (bufferDate.getMonth()+1).toString();
-        let day = bufferDate.getDate().toString();
-        if(month.length < 2){
-            month = `0${month}`;
-        } 
-        if(day.length < 2){
-            day = `0${day}`;
-        }
-        return `${year}-${month}-${day}`;
-    }
-
     const getReparseDateObject = (date1,date2,date3,date4) => {
         const dateBuffer = {
             1: reparseDate(date1),
@@ -96,7 +79,8 @@ const Homework = ({ state, type, num, history }) => {
     }
 
     const getHomework = () => {
-        axios.get(`${homeworkURL}/${homeworkNum}`,header).then((e)=> {
+        axios.get(`${homeworkURL}/${homeworkNum}`,header)
+        .then((e)=> {
             const data = e.data;
             const { 
                 file_info,
@@ -114,6 +98,9 @@ const Homework = ({ state, type, num, history }) => {
             categoryChange(homework_type);
             contentChange(homework_description);
             dateChange(dateBuffer);
+        })
+        .catch(()=> {
+            refreshAccessToken(refreshToken,actions,refreshAccessTokenURL);
         });
     }
 
@@ -135,13 +122,17 @@ const Homework = ({ state, type, num, history }) => {
 
         return data;
     }
+    //fix this part
 
     const setHomework = () => {
         const data = setData();
-        if(isDataAllow()){
+        if(isDataAllow(title,content,type,date)){
             axios.post(homeworkURL,data,header)
             .then(()=> {
                 history.push('/')
+            })
+            .catch(()=> {
+                refreshAccessToken(refreshToken,actions,refreshAccessTokenURL)
             });
         } else {
             alert("요소들을 다시 한번 확인해 주세요.");
@@ -154,6 +145,9 @@ const Homework = ({ state, type, num, history }) => {
             axios.patch(`${homeworkURL}/${homeworkNum}`,data,header)
             .then(()=> {
                 history.push('/')
+            })
+            .catch(()=>{
+                refreshAccessToken(refreshToken,actions,refreshAccessTokenURL);
             });
         } else {
             alert("error");
@@ -161,53 +155,14 @@ const Homework = ({ state, type, num, history }) => {
     }
 
     const deleteHomework = () => {
-        axios.delete(`${homeworkURL}/${homeworkNum}`,header);
-    }
-
-    const isDateAllow = (date) => {
-        const value = Object.values(date);
-        let flag = true;
-        value.map(e => {
-            if(e.length < 10){
-                flag = false;
-            }
-            return e;
+        axios.delete(`${homeworkURL}/${homeworkNum}`,header)
+        .then(()=> {
+            history.push('/');
         })
-        return flag;
-    }
-
-    const isDataAllow = () => {
-        if(title.length < 1){
-            return false;
-        } else if(content.length < 1){
-            return false;
-        } else if(type === -1){
-            return false;
-        } else if(!isDateAllow(date)){
-            return false;
-        }
-         else {
-            return true;
-        }
-    }
-
-    const isFile = (obj) => {
-        if(obj.type){
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    const isAllFile = (array) => {
-        let flag = true;
-        array.map((e)=>{
-            isFile(e) ? flag = true : flag = false;
-            return e;
+        .catch(()=> {
+            refreshAccessToken(refreshToken,actions,refreshAccessTokenURL);
         });
-        return flag;
     }
-
     useEffect(()=> {
         if(type === "Fix"){
             getHomework();
@@ -229,4 +184,4 @@ const Homework = ({ state, type, num, history }) => {
     )
 }
 
-export default withRouter(Homework);
+export default withRouter(Admin_Homework);

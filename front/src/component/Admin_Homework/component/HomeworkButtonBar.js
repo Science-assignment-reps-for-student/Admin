@@ -1,6 +1,7 @@
-import React from 'react'
-import * as S from '../../../style/HomeworkStyle'
-import { save, trash } from '../../../img'
+import React from 'react';
+import * as S from '../style/HomeworkStyle';
+import save from '../imgs/save.png';
+import trash from '../imgs/trash.png';
 
 const HomeworkButtonBar = ({ setHomework, patchHomework, deleteHomework, type }) => {
     return (

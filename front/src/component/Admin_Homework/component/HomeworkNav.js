@@ -1,6 +1,6 @@
-import React from 'react'
-import * as S from '../../../style/HomeworkStyle'
-import { HomeworkFile, HomeworkDay } from '../component'
+import React from 'react';
+import * as S from '../style/HomeworkStyle';
+import { HomeworkFile, HomeworkDay } from '../component';
 
 const HomeworkNav = ({ NavInfo, NavInfoChange }) => {
 

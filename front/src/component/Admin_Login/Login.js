@@ -1,12 +1,13 @@
 import React, { useState, useCallback } from 'react';
-import * as S from '../../style/LoginStyle';
-import { background } from '../../img';
+import * as S from './style/LoginStyle';
+import background from './imgs/background.png';
 import axios from 'axios';
-import { withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom';
+import { setLocalStorage, setContext } from '../resource/publicFunction';
 
-const LoginServerUrl = "http://1.237.96.178:3000/admin/auth";
+const LoginServerUrl = "http://15.164.184.104:8888/auth";
 
-const Login = ({ actions, history }) => {
+const AdminLogin = ({ actions, history }) => {
     const [id,idChange] = useState();
     const [pw,passwordChange] = useState();
 
@@ -18,19 +19,20 @@ const Login = ({ actions, history }) => {
         passwordChange(e.target.value);
     },[]);
 
-    const serverRequest = useCallback((url,id,pw) => {
+    const loginRequest = useCallback((url,userEmail,userPw,actions) => {
         const data = {
-            id,
-            pw,
+            userEmail,
+            userPw,
         };
-        axios.post(url, data).then((e)=> {
-            history.push('/')
+        axios.post(url, data)
+        .then((e)=> {
+            const accessToken = e.data.accessToken;
+            const refreshToken = e.data.refreshToken;
+            setLocalStorage(accessToken,refreshToken);
+            setContext(accessToken,refreshToken,actions);
+            history.push('/Admin');
         });
-    },[])
-
-    const LoginButtonHandler = useCallback((LoginServerUrl,id,pw) => {
-        serverRequest(LoginServerUrl,id,pw);
-    },[serverRequest]);
+    },[history]);
 
 
     return (
@@ -59,7 +61,7 @@ const Login = ({ actions, history }) => {
                             <p id="subTitle">Password</p>
                             <input type="password" placeholder="PASSWORD" onChange={passwordChangeHandler}/>
                         </div>
-                        <button onClick={()=> {LoginButtonHandler(LoginServerUrl,id,pw)}}>로그인</button>
+                        <button onClick={()=> {loginRequest(LoginServerUrl,id,pw,actions)}}>로그인</button>
                     </div>
                     <p><span>SCARFS</span>Admin console</p>
                 </S.LoginDiv>
@@ -68,4 +70,4 @@ const Login = ({ actions, history }) => {
     )
 }
 
-export default withRouter(Login);
+export default withRouter(AdminLogin);

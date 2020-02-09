@@ -1,5 +1,5 @@
 import React from 'react'
-import * as S from '../../../style/PublicStyle'
+import * as S from '../style/PublicStyle'
 import HeaderButton from './HeaderButton'
 
 const Header = () => {
