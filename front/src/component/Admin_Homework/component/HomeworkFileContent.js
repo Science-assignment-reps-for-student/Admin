@@ -6,4 +6,4 @@ const HomeworkFileContent = ({children}) => {
     )
 }
 
-export default HomeworkFileContent;
+export default React.memo(HomeworkFileContent);

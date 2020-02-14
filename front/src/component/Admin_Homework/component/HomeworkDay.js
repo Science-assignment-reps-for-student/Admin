@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import * as S from '../style/HomeworkStyle';
 
 const HomeworkDay = ({ dateChange, num, date }) => {
 
-    const inputChange = (e) => {
+    const inputChange = useCallback((e) => {
         const buffer = Object.assign({},date);
         const value = e.target.value;
         buffer[num] = value;
         dateChange(buffer);
-    }
+    },[date,dateChange,num])
 
 
 
@@ -20,4 +20,4 @@ const HomeworkDay = ({ dateChange, num, date }) => {
     )
 }
 
-export default HomeworkDay;
+export default React.memo(HomeworkDay);

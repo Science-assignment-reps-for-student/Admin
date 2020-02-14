@@ -69,8 +69,16 @@ export const LoginDiv = styled.div`
         }
     }
     > div{
+        > p{
+            font-size: 13px;
+            text-align: center;
+            font-weight: 600;
+            margin-top: 10px;
+        }
         margin-top:100px;
-        > #title{
+        > h1{
+            width: 100%;
+            text-align: center;
             font-weight: 600;
             font-size: 40px;
             margin-bottom:42px;

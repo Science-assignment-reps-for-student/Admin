@@ -4,12 +4,12 @@ import background from './imgs/background.png';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import { setLocalStorage, setContext } from '../resource/publicFunction';
-
-const LoginServerUrl = "http://15.164.184.104:8888/auth";
+import { LoginServerURL } from '../resource/serverURL';
 
 const AdminLogin = ({ actions, history }) => {
     const [id,idChange] = useState();
     const [pw,passwordChange] = useState();
+    const [error,errorChange] = useState(false);
 
     const idChangeHandler = useCallback((e) => {
         idChange(e.target.value);
@@ -19,20 +19,29 @@ const AdminLogin = ({ actions, history }) => {
         passwordChange(e.target.value);
     },[]);
 
-    const loginRequest = useCallback((url,userEmail,userPw,actions) => {
+    const loginRequest = useCallback((userEmail,userPw,actions) => {
         const data = {
             userEmail,
             userPw,
         };
-        axios.post(url, data)
+        axios.post(LoginServerURL, data)
         .then((e)=> {
             const accessToken = e.data.accessToken;
             const refreshToken = e.data.refreshToken;
             setLocalStorage(accessToken,refreshToken);
             setContext(accessToken,refreshToken,actions);
             history.push('/Admin');
+        })
+        .catch((e)=> {
+            errorChange(true);
         });
-    },[history]);
+    },[history])
+
+    const keyboardEnterHandler = ({key}) => {
+        if(key === "Enter"){
+            loginRequest(id,pw,actions);
+        }
+    }
 
 
     return (
@@ -52,16 +61,19 @@ const AdminLogin = ({ actions, history }) => {
                 </S.LoginHeader>
                 <S.LoginDiv>
                     <div>
-                        <p id="title">LOGIN</p>
+                        <h1 id="title">LOGIN</h1>
                         <div>
                             <p id="subTitle">Admin id</p>
-                            <input type="text" placeholder="ID" onChange={idChangeHandler}/>
+                            <input type="text" placeholder="ID" onChange={idChangeHandler} onKeyPress={keyboardEnterHandler}/>
                         </div>
                         <div>
                             <p id="subTitle">Password</p>
-                            <input type="password" placeholder="PASSWORD" onChange={passwordChangeHandler}/>
+                            <input type="password" placeholder="PASSWORD" onChange={passwordChangeHandler} onKeyPress={keyboardEnterHandler}/>
                         </div>
-                        <button onClick={()=> {loginRequest(LoginServerUrl,id,pw,actions)}}>로그인</button>
+                        <button onClick={()=> {loginRequest(id,pw,actions)}}>로그인</button>
+                        {
+                            error ? <p>아이디나 비밀번호를 확인해 주세요.</p> : ""
+                        }
                     </div>
                     <p><span>SCARFS</span>Admin console</p>
                 </S.LoginDiv>

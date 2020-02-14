@@ -45,10 +45,11 @@ export const Header = styled.div`
         }
         
         > div {
-            width: 346px;
+            width: 260px;
             height: 100%;
             display: flex;
             justify-content: space-between;
+            align-items: center;
         }
 
         > #logOut {
@@ -70,7 +71,7 @@ export const HeaderButton = styled.div`
         color: white;
     }
     > p {
-        transform: translateY(4px);
+        transform: translateY(8px);
     }
 `
 

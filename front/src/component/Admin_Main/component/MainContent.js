@@ -1,40 +1,127 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import * as S from '../style/MainStyle';
-import { MainClass } from '../component';
-import edit from '../imgs/edit.png';
+import { MainClass, MainTeamClass, MainExperimentClass } from '../component';
+import { edit, excel, download } from '../imgs';
+import { withRouter } from 'react-router-dom';
 
-const MainContent = ({checked,title,classData}) => {
-    const dummyData = [
-        {
-            num: 1,
-        },
-        {
-            num: 2,
-        },
-        {
-            num: 3,
-        },
-        {
-            num: 4,
+const MainContent = ({ checked, title, classData, type, contentId, history, fileDownload }) => {
+
+    const classDataKey = Object.keys(classData);
+    const filteredData = classDataKey.filter((e)=> checked[e]);
+
+    const classToInt = (string) => {
+        switch(string){
+            case "class_1":
+                return 1;
+            case "class_2":
+                return 2;
+            case "class_3":
+                return 3;
+            case "class_4":
+                return 4;
+            default:
+                return 0;
         }
-    ];
-    const checkedValue = Object.values(checked);
-    const filteredData = dummyData.filter((e)=> checkedValue[e.num-1]); 
+    }
+
+    const getClass = useCallback((classData, classDataKey, title) => {
+        let buffer = [];
+        classDataKey.map((key) => {
+            const data = classData[key];
+            const { deadline, submit_list } = data;
+            buffer.push(<MainClass 
+                num={classToInt(key)} 
+                title={title} 
+                studentList={submit_list} 
+                deadline={deadline} 
+                fileDownload={fileDownload}
+                key={`${title}${key}`}
+                contentId={contentId}
+                type={type}
+                ></MainClass>);
+
+            return key;
+        })
+        return buffer;
+    },[contentId,fileDownload,type])   
+
+    const getTeamClass = useCallback((classData, classDataKey, title) => {
+        let buffer = [];
+        classDataKey.map((key) => {
+            const data = classData[key];
+            const { deadline, personal_submit_list, team_submit_list } = data;
+            buffer.push(<MainTeamClass 
+                num={classToInt(key)} 
+                title={title} 
+                studentList={personal_submit_list} 
+                teamList={team_submit_list} 
+                deadline={deadline} 
+                key={`${title}${key}`}
+                fileDownload={fileDownload}
+                contentId={contentId}
+                type={type}
+            ></MainTeamClass>);
+            return key;
+        })
+        return buffer;
+    },[contentId,fileDownload,type])
+
+    const getExperimentClass = useCallback((classData, classDataKey, title) => {
+        let buffer = [];
+        classDataKey.map((key) => {
+            const data = classData[key];
+            const { env_submit_list, experiment_submit_list, deadline } = data;
+            buffer.push(<MainExperimentClass 
+                num={classToInt(key)} 
+                title={title} 
+                studentList={env_submit_list} 
+                teamList={experiment_submit_list} 
+                deadline={deadline} 
+                key={`${title}${key}`}
+                fileDownload={fileDownload}
+                contentId={contentId}
+                type={type}
+            ></MainExperimentClass>);
+            return key;
+        })
+        return buffer;
+    },[contentId,fileDownload,type])
+
+    const getTitle = useCallback((type,title) => {
+        return getType(type) + title;
+    },[])
+
+    const getType = useCallback((type) => {
+        switch(type){
+            case 0: 
+                return "[개인]";
+            case 1:
+                return "[팀]";
+            case 2: 
+                return "[실험]";
+            default:
+                return "error";
+        }
+    },[])
+
     return (
         <S.MainContent>
             <div className="wrapper">
-                <h2>{title}</h2>
-                <S.MainFixButton><img src={edit} alt=""/>수정</S.MainFixButton>
+                <h2>{getTitle(type,title)}</h2>
+                <div>
+                    <S.MainFixButton onClick={()=> {history.push(`/Admin/revise/${contentId}`)}}><img src={edit} alt=""/>수정</S.MainFixButton>
+                    <S.MainFixButton><img src={excel} alt=""/>엑셀</S.MainFixButton>
+                    <S.MainFixButton onClick={()=>{fileDownload(contentId)}}><img src={download} alt=""/>파일</S.MainFixButton>
+                </div>
             </div>
-           
             <hr/>
             <div>
                 {
-                    filteredData.map((e)=> <MainClass key={e.num} num={e.num} title={title}></MainClass>)
+                    type === 0 ? getClass(classData, filteredData, title) : type === 1 ? getTeamClass(classData, filteredData, title) : getExperimentClass(classData, filteredData, title)
                 }
             </div>
         </S.MainContent>
     )
 }
 
-export default MainContent;
+export default  React.memo(withRouter(MainContent));

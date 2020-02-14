@@ -1,20 +1,20 @@
 import React, { useCallback } from 'react';
 import * as S from '../style/MainStyle';
-import { MainListContent } from '../component';
+import { MainTeamListContent } from '../component';
 import axios from 'axios';
-import { getFileCodeURL, personalFileDownloadURL , refreshAccessTokenURL } from '../../resource/serverURL';
+import { getFileCodeURL, refreshAccessTokenURL, teamFileDownloadURL } from '../../resource/serverURL';
 import { refreshAccessToken, getIsExpiration } from '../../resource/publicFunction';
 
-const MainList = ({ studentList, text, contentId, state, actions }) => {
-
-    const { accessToken, refreshToken } = state;
+const MainTeamList = ({ teamList, text, state, actions, contentId }) => {
+    let count = 0;
+    const { refreshToken, accessToken } = state;
     const header = {
         headers: {
             "Authorization": `Bearer ${accessToken}`,
         }
     }
-    
-    const personalFileDownload = useCallback((codeList,number) => {
+
+    const teamFileDownload = useCallback((codeList,teamName) => {
         const downloadHeader = {
             headers: {
                 "Authorization": `Bearer ${accessToken}`,
@@ -22,16 +22,16 @@ const MainList = ({ studentList, text, contentId, state, actions }) => {
             responseType: "blob"
         }
         codeList.map((e)=> {
-            const { user_number, file_name, file_id } = e;
-            if(number === user_number){
-                axios.get(`${personalFileDownloadURL}/${file_id}`,downloadHeader)
+            const { team_name, file_name, file_id } = e;
+            if(teamName === team_name){
+                axios.get(`${teamFileDownloadURL}/${file_id}`,downloadHeader)
                 .then((file)=> {
                     const link = document.createElement("a");
                     link.href = URL.createObjectURL(file.data);
                     link.download = file_name;
-                    link.click()
+                    link.click();
                 })
-                .catch(()=> {
+                .catch((e)=> {
                     getIsExpiration(e) 
                     ? refreshAccessToken(refreshToken,actions,refreshAccessTokenURL) 
                     : alert("네트워크를 확인해 주세요.");
@@ -39,20 +39,21 @@ const MainList = ({ studentList, text, contentId, state, actions }) => {
             }
             return e;
         })
-    },[accessToken,refreshToken,actions]);
+    },[accessToken,actions,refreshToken])
 
-    const getFileCode = useCallback((number) => {
+    const getFileCode = useCallback((teamName) => {
         if(contentId){
             axios.get(`${getFileCodeURL}/${contentId}`,header)
             .then((e)=> {
                 const codeList = e.data.file;
-                personalFileDownload(codeList,number);
+                teamFileDownload(codeList,teamName);
             })
             .catch((e)=> {
                 getIsExpiration(e) ? refreshAccessToken(refreshToken,actions,refreshAccessTokenURL) : alert("네트워크를 확인해 주세요.");
             })
         }
-    },[actions,contentId,refreshToken,header,personalFileDownload])
+    },[actions,contentId,header,refreshToken,teamFileDownload])
+
 
     return ( 
         <S.MainList>
@@ -60,12 +61,22 @@ const MainList = ({ studentList, text, contentId, state, actions }) => {
             <table>
                 <tbody>
                     <S.MainListContent>
-                        <th>학번</th>
-                        <th>이름</th>
+                        <th colSpan="2">팀</th>
                         <th>제출여부</th>
                     </S.MainListContent>
                     {
-                        studentList.map(({user_name,user_number,submit}) => <MainListContent name={user_name} number={user_number} isChecked={submit} getFile={getFileCode}/>)
+                        teamList.map((e)=> {
+                            const { submit, team_name , team_info } = e;
+                            count++;
+                            return <MainTeamListContent 
+                                submit={submit} 
+                                teamName={team_name} 
+                                teamList={team_info} 
+                                count={count} 
+                                key={count+team_name}
+                                getFileCode={getFileCode}
+                            />
+                        })
                     }
                 </tbody>
             </table>
@@ -73,4 +84,4 @@ const MainList = ({ studentList, text, contentId, state, actions }) => {
     )
 }
 
-export default React.memo(MainList);
+export default React.memo(MainTeamList);

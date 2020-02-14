@@ -1,14 +1,13 @@
 import React from 'react';
 import * as S from '../style/MainStyle';
-
-const MainListContent = ({number,name,isChecked}) => {
+const MainListContent = ({ number, name, isChecked, getFile }) => {
     return (
-        <S.MainListContent>
+        <S.MainListContent onClick={()=>{getFile(number)}}>
             <td>{number}</td>
             <td>{name}</td>
-            <td>{isChecked ? "O" : "X"}</td>
+            <td>{isChecked ? isChecked === 1 ? "O" : "△" : "X"}</td>
         </S.MainListContent>
     )
 }
 
-export default MainListContent;
+export default React.memo(MainListContent);

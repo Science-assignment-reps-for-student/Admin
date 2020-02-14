@@ -3,12 +3,12 @@ import { Header, BackgroundBlack } from '../public';
 import * as S from './style/HomeworkStyle';
 import { HomeworkNav, HomeworkButtonBar, HomeworkMain } from './component';
 import axios from 'axios';
-import { homeworkURL, refreshAccessTokenURL } from '../resource/serverURL';
-import { refreshAccessToken, parseDate, reparseDate, isDataAllow, isAllFile } from '../resource/publicFunction';
-import { withRouter } from 'react-router-dom';
+import { homeworkURL, refreshAccessTokenURL, getUserInfoURL } from '../resource/serverURL';
+import { refreshAccessToken, parseDate, reparseDate, isDataAllow, isAllFile, getUserInfo, getIsExpiration } from '../resource/publicFunction';
+import { withRouter, useParams } from 'react-router-dom';
 
-const Admin_Homework = ({ state, type, num, history, actions }) => {
-    const homeworkNum = 52;
+const Admin_Homework = ({ state, type, history, actions }) => {
+    const { homeworkNum } = useParams();
     const { accessToken, refreshToken } = state;
     const header = {
         headers: {
@@ -99,8 +99,12 @@ const Admin_Homework = ({ state, type, num, history, actions }) => {
             contentChange(homework_description);
             dateChange(dateBuffer);
         })
-        .catch(()=> {
-            refreshAccessToken(refreshToken,actions,refreshAccessTokenURL);
+        .catch((e)=> {
+            if(getIsExpiration(e)){
+                refreshAccessToken(refreshToken,actions,refreshAccessTokenURL);
+            } else {
+                alert("네트워크를 확인하세요.");
+            }
         });
     }
 
@@ -122,17 +126,23 @@ const Admin_Homework = ({ state, type, num, history, actions }) => {
 
         return data;
     }
-    //fix this part
 
     const setHomework = () => {
         const data = setData();
         if(isDataAllow(title,content,type,date)){
             axios.post(homeworkURL,data,header)
             .then(()=> {
-                history.push('/')
+                history.push('/Admin');
             })
-            .catch(()=> {
-                refreshAccessToken(refreshToken,actions,refreshAccessTokenURL)
+            .catch((e)=> {
+                if(getIsExpiration(e)){
+                    refreshAccessToken(refreshToken,actions,refreshAccessTokenURL)
+                    .then(()=> {
+                        setHomework();
+                    })
+                } else{
+                    alert("네트워크를 확인하세요.")
+                }
             });
         } else {
             alert("요소들을 다시 한번 확인해 주세요.");
@@ -141,26 +151,40 @@ const Admin_Homework = ({ state, type, num, history, actions }) => {
     
     const patchHomework = () => {
         const data = setData();
-        if(isDataAllow()){
+        if(isDataAllow(title,content,type,date)){
             axios.patch(`${homeworkURL}/${homeworkNum}`,data,header)
             .then(()=> {
-                history.push('/')
+                history.push('/Admin')
             })
-            .catch(()=>{
-                refreshAccessToken(refreshToken,actions,refreshAccessTokenURL);
+            .catch((e)=>{
+                if(getIsExpiration(e)){
+                    refreshAccessToken(refreshToken,actions,refreshAccessTokenURL)
+                    .then(()=> {
+                        patchHomework();
+                    })
+                } else{
+                    alert("네트워크를 확인해 주세요.")
+                }
             });
         } else {
-            alert("error");
+            alert("요소들을 다시 한번 확인해 주세요.");
         }
     }
 
     const deleteHomework = () => {
         axios.delete(`${homeworkURL}/${homeworkNum}`,header)
         .then(()=> {
-            history.push('/');
+            history.push('/Admin');
         })
-        .catch(()=> {
-            refreshAccessToken(refreshToken,actions,refreshAccessTokenURL);
+        .catch((e)=> {
+            if(getIsExpiration(e)){
+                refreshAccessToken(refreshToken,actions,refreshAccessTokenURL)
+                .then(()=> {
+                    deleteHomework();
+                });
+            } else {
+                alert("네트워크를 확인해 주세요.");
+            }
         });
     }
     useEffect(()=> {
@@ -168,6 +192,19 @@ const Admin_Homework = ({ state, type, num, history, actions }) => {
             getHomework();
         }
     },[type])
+
+    useEffect(()=> {
+        const isAdmin = getUserInfo(getUserInfoURL,accessToken);
+        isAdmin
+        .then((userType)=> {
+            if(!userType){
+                history.push('/admin/Login');
+            }
+        })
+        .catch(()=> {
+            history.push('/admin/Login');
+        })
+    },[])
 
     return (
         <BackgroundBlack>

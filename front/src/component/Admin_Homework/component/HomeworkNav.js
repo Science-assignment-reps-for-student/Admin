@@ -33,4 +33,4 @@ const HomeworkNav = ({ NavInfo, NavInfoChange }) => {
     )
 }
 
-export default HomeworkNav;
+export default React.memo(HomeworkNav);

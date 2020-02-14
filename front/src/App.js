@@ -14,8 +14,8 @@ function App() {
                 return (
                   <>  
                     <Route path="/Admin/Login" render={()=> <AdminLogin actions={actions}/>}/>
-                    <Route path="/Amdin/Make" render={() => <Homework state={state} actions={actions} type="Make"/>}/>
-                    <Route path="/Admin/revise" render={() => <Homework state={state} actions={actions} type="Fix"/>}/>
+                    <Route path="/Admin/Make" render={() => <Homework state={state} actions={actions} type="Make"/>}/>
+                    <Route path="/Admin/revise/:homeworkNum" render={() => <Homework state={state} actions={actions} type="Fix"/>}/>
                     <Route exact path="/Admin" render={()=> <AdminMain state={state} actions={actions}/>}/>
                   </>
                 );
@@ -28,3 +28,5 @@ function App() {
 };
 
 export default withRouter(App);
+
+

@@ -74,4 +74,4 @@ const HomeworkTitle = ({ TitleInfo, TitleInfoChange }) => {
     )
 }
 
-export default HomeworkTitle;
+export default React.memo(HomeworkTitle);

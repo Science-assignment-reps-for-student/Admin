@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import * as S from '../style/HomeworkStyle';
 import { HomeworkTitle } from '../component';
 
@@ -6,9 +6,9 @@ const HomeworkMain = ({ MainInfo, MainInfoChange }) => {
     const { category, title, content } = MainInfo;
     const { categoryChange, titleChange, contentChange } = MainInfoChange;
 
-    const inputChange = (e) => {
+    const inputChange = useCallback((e) => {
         contentChange(e.target.value)
-    }
+    },[contentChange])
 
     const TitleInfo = {
         title,
@@ -29,4 +29,4 @@ const HomeworkMain = ({ MainInfo, MainInfoChange }) => {
     )
 }
 
-export default HomeworkMain;
+export default React.memo(HomeworkMain);

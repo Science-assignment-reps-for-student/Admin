@@ -7,11 +7,11 @@ const HeaderButton = ({children,page,history}) => {
     const [isHover,hoverChange] = useState(false);
 
     const pages = {
-        main: () => { history.push('/') },
-        make: () => { history.push('/Make') },
+        main: () => { history.push('/Admin') },
+        make: () => { history.push('/Admin/Make') },
         qna: () => { history.push('/QnA') },
-        revise: () => { history.push('/revise') },
-        logout: () => { history.push('/Login') }
+        revise: () => { history.push('/Admin/revise') },
+        logout: () => { history.push('/Admin/Login') }
     }
     
     const mouseEnter = () => {
@@ -23,7 +23,7 @@ const HeaderButton = ({children,page,history}) => {
     }
 
     const movePage = () => {
-        pages[page]();
+        pages[page]();  
     }
 
     return (

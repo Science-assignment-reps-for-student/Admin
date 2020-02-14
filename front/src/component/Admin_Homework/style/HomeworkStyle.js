@@ -142,6 +142,7 @@ export const HomeworkDayInput = styled.input`
 
 
 export const HomeworkFile = styled.div`
+    cursor: default;
     width: 340px;
     height: 80px;
     display: flex;
@@ -149,10 +150,13 @@ export const HomeworkFile = styled.div`
     justify-content: center;
     align-items: center;
     border: 1px solid #E1E1E1;
+    overflow-y: scroll;
     font-size: 13px;
     font-weight: 600;
-    overflow-y: scroll;
     margin-top: 10px;
+    &::-webkit-scrollbar {
+        display: none;
+    }
     > div {
         > img {
             width: 11px;
@@ -214,10 +218,22 @@ export const HomeworkCheckBox = styled.div`
     align-items: center;
 `
 
-export const HomeworkFileLabel = styled.label`
+export const HomeworkFileLabel = styled.div`
+    cursor: pointer;
     width: 100%;
+    display: flex;  
+    justify-content: center;
     text-align: center;
-    >input {
-        display: none;
+    > div {
+        margin: 5px;
+    }
+    > label {
+        > div{
+            margin: 5px;
+            cursor: pointer;
+        }
+        >input {
+            display: none;
+        }
     }
 `

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const refreshAccessToken = (refreshToken,actions,refreshAccessTokenURL) => {
+export const refreshAccessToken = (refreshToken,actions,refreshAccessTokenURL)=> {
     const refreshHeader = {
         "headers": {
             "Authorization": refreshToken,
@@ -12,7 +12,6 @@ export const refreshAccessToken = (refreshToken,actions,refreshAccessTokenURL) =
         const refreshTokenBuffer = e.data.refreshToken;
         setLocalStorage(accessTokenBuffer,refreshTokenBuffer);
         setContext(accessTokenBuffer,refreshTokenBuffer,actions);
-
     })
 }
 
@@ -87,4 +86,34 @@ export const isAllFile = (array) => {
         return e;
     });
     return flag;
+}
+
+export const getUserInfo = (url,accessToken) => {
+    const header = {
+        headers: {
+            "Authorization": accessToken,
+        }
+    }
+    return new Promise((resolve,reject)=> {
+        axios.get(url,header)
+        .then((e)=> {
+            const userType = e.data.userType;
+            if(userType !== 1){
+                resolve(false);
+            }
+            resolve(true);
+        })
+        .catch((e)=> {
+            reject(e);
+        })
+    })
+}
+
+export const getIsExpiration = (err) => {
+    const statusCode = err.response.status;
+    if(statusCode === 401 || statusCode === 410 || statusCode === 422){
+        return true;
+    } else{
+        return false;
+    }
 }

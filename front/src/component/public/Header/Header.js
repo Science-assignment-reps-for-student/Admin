@@ -11,7 +11,6 @@ const Header = () => {
                 <div>
                     <HeaderButton page="main">제출현황</HeaderButton>
                     <HeaderButton page="make">과제생성</HeaderButton>
-                    <HeaderButton page="revise">과제수정</HeaderButton>
                     <HeaderButton page="qna">QnA</HeaderButton>
                 </div>
             </div>
