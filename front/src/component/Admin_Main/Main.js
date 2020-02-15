@@ -41,6 +41,8 @@ const AdminMain = ({ state, actions, history }) => {
         2: false,
     })
 
+    const [ count, countChange ] = useState(5)
+
     const { accessToken, refreshToken } = state;
     
     const header = {
@@ -88,9 +90,13 @@ const AdminMain = ({ state, actions, history }) => {
         if(isLoaded){   
             getPersonalHomework(personalHomeworkURL,header,checked,data,content);
         }
-    },[refreshToken])
+    },[refreshToken]);
 
-    const allFileDownload = useCallback((contentId) => {
+    useEffect(()=> {
+        console.log(content);
+    },[content])
+
+    const allFileDownload = (contentId) => {
         const fileHeader = {
             headers: {
                 "Authorization": `Bearer ${accessToken}`
@@ -113,10 +119,10 @@ const AdminMain = ({ state, actions, history }) => {
             ? refreshAccessToken(refreshToken,actions,refreshAccessTokenURL) 
             : alert("네트워크를 확인해 주세요.");
         })
-    },[accessToken,actions,header,refreshToken])
+    }
 
     
-    const makeContent = useCallback((data,type,checked) => {
+    const makeContent = (data,type,checked) => {
         let buffer = [];
         data.map((contentData)=> {
             const { created_at, homework_description, homework_id, homework_title, ...classData } = contentData;
@@ -128,13 +134,14 @@ const AdminMain = ({ state, actions, history }) => {
                 key={homework_id} 
                 contentId={homework_id}
                 fileDownload={allFileDownload}
+                created_at={created_at}
                 />);
             return contentData;
         });
         return buffer;
-    },[allFileDownload])
+    }
 
-    const getExperimentHomework = useCallback((url,header,checked,data,content) => {
+    const getExperimentHomework = (url,header,checked,data,content) => {
         axios.get(url,header)
         .then((e)=> {
             const homeworkData = e.data;
@@ -150,9 +157,9 @@ const AdminMain = ({ state, actions, history }) => {
             ? refreshAccessToken(refreshToken,actions,refreshAccessTokenURL) 
             : alert("네트워크를 확인해 주세요.");
         })
-    },[actions,contentChange,loadedChange,dataChange,makeContent,refreshToken])
+    }
 
-    const getTeamHomework = useCallback((url,header,checked,data,content) => {
+    const getTeamHomework = (url,header,checked,data,content) => {
         axios.get(url,header)
         .then((e)=> {
             const homeworkData = e.data;
@@ -166,9 +173,9 @@ const AdminMain = ({ state, actions, history }) => {
             ? refreshAccessToken(refreshToken,actions,refreshAccessTokenURL) 
             : alert("네트워크를 확인해 주세요.");
         })
-    },[actions,getExperimentHomework,makeContent,refreshToken])
+    }
 
-    const getPersonalHomework = useCallback((url,header,checked,data,content) => {
+    const getPersonalHomework = (url,header,checked,data,content) => {
         axios.get(url,header)
         .then((e)=> {
             const homeworkData = e.data;
@@ -184,7 +191,7 @@ const AdminMain = ({ state, actions, history }) => {
             ? refreshAccessToken(refreshToken,actions,refreshAccessTokenURL) 
             : alert("네트워크를 확인해 주세요.");
         })
-    },[actions,refreshToken,getTeamHomework,makeContent])
+    }
 
 
     useEffect(()=> {
@@ -198,33 +205,61 @@ const AdminMain = ({ state, actions, history }) => {
             })
             contentChange(contentBuffer);
         }
-    }, [checked,content,contentChange,data,isLoaded,makeContent]);
+    }, [checked]);
 
 
     const getArrowHomework = (homeworkType,content) => {
         const typeKey = Object.keys(homeworkType);
         let buffer = [];
+        let result = [];
         typeKey.map((key)=> {
             if(homeworkType[key]){
+                console.log(content[key]);
                 buffer = [...buffer,...content[key]];
             }
             return key;
-        })
-        return buffer;
+        });
+        buffer.sort((prev,next)=> {
+            if(prev.props.created_at < next.props.created_at){
+                return 1;
+            } else if(prev.props.created_at > next.props.created_at){
+                return -1;
+            } else {
+                return 0;
+            }
+        });
+        console.log(buffer);
+        for(let i = 0 ;i < count;i++){
+            if(buffer[i]){  
+                result.push(buffer[i]);
+            }
+        }
+        return result;
     }
+
+    const isHomeworkTypeAllTrue = (homeworkType) => {
+        return homeworkType[0] || homeworkType[1] || homeworkType[2];
+    }
+
+    const handleScroll = (e) => {
+        const { scrollTop, scrollHeight } = e.target;
+        if(scrollHeight - scrollTop < 900 && isHomeworkTypeAllTrue(homeworkType)){
+            countChange(count+5);
+        }
+    };
 
     return (
         <>
             <Header/>
             <BackgroundWhite>
-                <S.MainDiv>
+                <S.MainDiv onScroll={handleScroll}>
                     <div>
                         <h1>제출 현황</h1>
                         <hr/>
                         {
                             getArrowHomework(homeworkType, content).length > 0 && isLoaded ? getArrowHomework(homeworkType,content) : 
                             <S.MainLoadingContent>
-                                <div class="loadingio-spinner-gear-navzgsfup8"><div class="ldio-dlvqi1wu39l">
+                                <div className="loadingio-spinner-gear-navzgsfup8"><div class="ldio-dlvqi1wu39l">
                                 <div><div></div><div></div><div></div><div></div><div></div><div></div></div>
                                 </div></div>
                             </S.MainLoadingContent>

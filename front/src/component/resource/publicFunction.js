@@ -110,10 +110,14 @@ export const getUserInfo = (url,accessToken) => {
 }
 
 export const getIsExpiration = (err) => {
-    const statusCode = err.response.status;
-    if(statusCode === 401 || statusCode === 410 || statusCode === 422){
-        return true;
-    } else{
-        return false;
+    try{
+        const statusCode = err.response.status;
+        if(statusCode === 401 || statusCode === 410 || statusCode === 422){
+            return true;
+        } else{
+            return false;
+        }
+    } catch {
+        // alert("")
     }
 }

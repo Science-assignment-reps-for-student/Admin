@@ -14,7 +14,7 @@ const MainList = ({ studentList, text, contentId, state, actions }) => {
         }
     }
     
-    const personalFileDownload = useCallback((codeList,number) => {
+    const personalFileDownload = (codeList,number) => {
         const downloadHeader = {
             headers: {
                 "Authorization": `Bearer ${accessToken}`,
@@ -39,9 +39,9 @@ const MainList = ({ studentList, text, contentId, state, actions }) => {
             }
             return e;
         })
-    },[accessToken,refreshToken,actions]);
+    }
 
-    const getFileCode = useCallback((number) => {
+    const getFileCode = (number) => {
         if(contentId){
             axios.get(`${getFileCodeURL}/${contentId}`,header)
             .then((e)=> {
@@ -52,7 +52,7 @@ const MainList = ({ studentList, text, contentId, state, actions }) => {
                 getIsExpiration(e) ? refreshAccessToken(refreshToken,actions,refreshAccessTokenURL) : alert("네트워크를 확인해 주세요.");
             })
         }
-    },[actions,contentId,refreshToken,header,personalFileDownload])
+    }
 
     return ( 
         <S.MainList>
@@ -73,4 +73,4 @@ const MainList = ({ studentList, text, contentId, state, actions }) => {
     )
 }
 
-export default React.memo(MainList);
+export default MainList;

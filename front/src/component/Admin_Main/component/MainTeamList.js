@@ -14,7 +14,7 @@ const MainTeamList = ({ teamList, text, state, actions, contentId }) => {
         }
     }
 
-    const teamFileDownload = useCallback((codeList,teamName) => {
+    const teamFileDownload = (codeList,teamName) => {
         const downloadHeader = {
             headers: {
                 "Authorization": `Bearer ${accessToken}`,
@@ -39,9 +39,9 @@ const MainTeamList = ({ teamList, text, state, actions, contentId }) => {
             }
             return e;
         })
-    },[accessToken,actions,refreshToken])
+    }
 
-    const getFileCode = useCallback((teamName) => {
+    const getFileCode = (teamName) => {
         if(contentId){
             axios.get(`${getFileCodeURL}/${contentId}`,header)
             .then((e)=> {
@@ -52,7 +52,7 @@ const MainTeamList = ({ teamList, text, state, actions, contentId }) => {
                 getIsExpiration(e) ? refreshAccessToken(refreshToken,actions,refreshAccessTokenURL) : alert("네트워크를 확인해 주세요.");
             })
         }
-    },[actions,contentId,header,refreshToken,teamFileDownload])
+    }
 
 
     return ( 
@@ -68,14 +68,7 @@ const MainTeamList = ({ teamList, text, state, actions, contentId }) => {
                         teamList.map((e)=> {
                             const { submit, team_name , team_info } = e;
                             count++;
-                            return <MainTeamListContent 
-                                submit={submit} 
-                                teamName={team_name} 
-                                teamList={team_info} 
-                                count={count} 
-                                key={count+team_name}
-                                getFileCode={getFileCode}
-                            />
+                            return <MainTeamListContent submit={submit} teamName={team_name} teamList={team_info} count={count} getFileCode={getFileCode}/>
                         })
                     }
                 </tbody>

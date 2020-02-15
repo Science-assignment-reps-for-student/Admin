@@ -1,11 +1,12 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import * as S from '../style/MainStyle';
 import { MainList } from '../component';
 import { AccessTokenConsumer } from '../../../context/AccessTokenContext';
+import { reparseDate } from '../../resource/publicFunction';
 
-const MainClass = ({ num, title, studentList, deadline, contentId }) => {
+const MainClass = ({ num, title, studentList, deadline, contentId, created_at }) => {
 
-    const countChecked = useCallback((studentList) => {
+    const countChecked = (studentList) => {
         let counter = 0;
         if(Array.isArray(studentList)){
             studentList.map((e)=>{
@@ -16,7 +17,7 @@ const MainClass = ({ num, title, studentList, deadline, contentId }) => {
             })
         }
         return counter;
-    },[])
+    }
     
     const max = studentList.length;
     const count = countChecked(studentList);
@@ -26,7 +27,7 @@ const MainClass = ({ num, title, studentList, deadline, contentId }) => {
         <div>
             <h2>{num}반</h2>
             <S.MainClass>
-                <h3>{title}</h3>
+                <h3>{title}<span>시작: {reparseDate(created_at*1000)} 종료 : {reparseDate(deadline*1000)}</span></h3>
                 <hr/>
                 <div>
                     <S.MainClassCount>
@@ -52,4 +53,4 @@ const MainClass = ({ num, title, studentList, deadline, contentId }) => {
     )
 }
 
-export default React.memo(MainClass);
+export default MainClass;

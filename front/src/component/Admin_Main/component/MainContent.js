@@ -4,7 +4,7 @@ import { MainClass, MainTeamClass, MainExperimentClass } from '../component';
 import { edit, excel, download } from '../imgs';
 import { withRouter } from 'react-router-dom';
 
-const MainContent = ({ checked, title, classData, type, contentId, history, fileDownload }) => {
+const MainContent = ({ checked, title, classData, type, contentId, history, fileDownload, created_at }) => {
 
     const classDataKey = Object.keys(classData);
     const filteredData = classDataKey.filter((e)=> checked[e]);
@@ -24,7 +24,7 @@ const MainContent = ({ checked, title, classData, type, contentId, history, file
         }
     }
 
-    const getClass = useCallback((classData, classDataKey, title) => {
+    const getClass = (classData, classDataKey, title) => {
         let buffer = [];
         classDataKey.map((key) => {
             const data = classData[key];
@@ -38,14 +38,15 @@ const MainContent = ({ checked, title, classData, type, contentId, history, file
                 key={`${title}${key}`}
                 contentId={contentId}
                 type={type}
+                created_at={created_at}
                 ></MainClass>);
 
             return key;
         })
         return buffer;
-    },[contentId,fileDownload,type])   
+    }   
 
-    const getTeamClass = useCallback((classData, classDataKey, title) => {
+    const getTeamClass = (classData, classDataKey, title) => {
         let buffer = [];
         classDataKey.map((key) => {
             const data = classData[key];
@@ -60,13 +61,14 @@ const MainContent = ({ checked, title, classData, type, contentId, history, file
                 fileDownload={fileDownload}
                 contentId={contentId}
                 type={type}
+                created_at={created_at}
             ></MainTeamClass>);
             return key;
         })
         return buffer;
-    },[contentId,fileDownload,type])
+    }
 
-    const getExperimentClass = useCallback((classData, classDataKey, title) => {
+    const getExperimentClass = (classData, classDataKey, title) => {
         let buffer = [];
         classDataKey.map((key) => {
             const data = classData[key];
@@ -81,17 +83,18 @@ const MainContent = ({ checked, title, classData, type, contentId, history, file
                 fileDownload={fileDownload}
                 contentId={contentId}
                 type={type}
+                created_at={created_at}
             ></MainExperimentClass>);
             return key;
         })
         return buffer;
-    },[contentId,fileDownload,type])
+    }
 
-    const getTitle = useCallback((type,title) => {
+    const getTitle = (type,title) => {
         return getType(type) + title;
-    },[])
+    }
 
-    const getType = useCallback((type) => {
+    const getType = (type) => {
         switch(type){
             case 0: 
                 return "[개인]";
@@ -102,7 +105,7 @@ const MainContent = ({ checked, title, classData, type, contentId, history, file
             default:
                 return "error";
         }
-    },[])
+    }
 
     return (
         <S.MainContent>
@@ -117,11 +120,13 @@ const MainContent = ({ checked, title, classData, type, contentId, history, file
             <hr/>
             <div>
                 {
-                    type === 0 ? getClass(classData, filteredData, title) : type === 1 ? getTeamClass(classData, filteredData, title) : getExperimentClass(classData, filteredData, title)
+                    type === 0 ? 
+                    getClass(classData, filteredData, title) : 
+                    type === 1 ? getTeamClass(classData, filteredData, title) : getExperimentClass(classData, filteredData, title)
                 }
             </div>
         </S.MainContent>
     )
 }
 
-export default  React.memo(withRouter(MainContent));
+export default  withRouter(MainContent);

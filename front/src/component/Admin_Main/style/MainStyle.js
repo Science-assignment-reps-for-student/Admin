@@ -49,6 +49,11 @@ export const MainClass = styled.div`
     margin: 10px;
     > h3 {
         margin: 10px;
+        display: flex;
+        justify-content: space-between;
+        > span 
+            text-align: right;
+        }
     }
     > div{
         height: 235px;

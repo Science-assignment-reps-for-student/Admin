@@ -4,31 +4,31 @@ import * as S from '../style/MainStyle';
 
 const MainNav = ({ checked, checkedChange, typeChange, type }) => {
     
-    const isAllChecked = useCallback(() => {
+    const isAllChecked = () => {
         const checkedValue = Object.values(checked);
         return checkedValue.find((e) => e !== false);
-    },[checked])
+    }
 
-    const allCheck = useCallback((e) => {
+    const allCheck = (e) => {
         const keys = Object.keys(checked);
         let buffer = Object.assign({},checked);
         keys.map((num)=>{
             buffer[num] = e.target.checked;
         });
         checkedChange(buffer);
-    },[checked,checkedChange])
+    }
 
-    const handleClick = useCallback((classNumber) => {
+    const handleClick = (classNumber) => {
         let buffer = Object.assign({},checked);
         buffer[`class_${classNumber}`] = !buffer[`class_${classNumber}`];
         checkedChange(buffer);
-    },[checked,checkedChange])
+    }
 
-    const homeworkHandleClick = useCallback((homeworkType) => {
+    const homeworkHandleClick = (homeworkType) => {
         let buffer = Object.assign({},type);
         buffer[homeworkType] = !buffer[homeworkType];
         typeChange(buffer);
-    },[type,typeChange])
+    }
 
     return ( 
         <S.MainNav>
@@ -74,4 +74,4 @@ const MainNav = ({ checked, checkedChange, typeChange, type }) => {
     )
 }
 
-export default React.memo(MainNav);
+export default MainNav;
